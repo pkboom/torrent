@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Torrent</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <header class="toolbar" data-tauri-drag-region>
+    <h1 data-tauri-drag-region>Torrent</h1>
+    <div class="spacer" data-tauri-drag-region></div>
+  </header>
+
+  <div class="columns" id="columns">
+    <label class="c-check"><input type="checkbox" id="check-all" aria-label="Select all"></label>
+    <span class="c-name">
+      <span id="selection-bar" class="selection-bar">
+        <button id="delete-selected" class="act delete danger" title="Delete selected" aria-label="Delete selected">
+          <svg viewBox="0 0 16 16"><path d="M3 4.5h10M6.5 4.5V3h3v1.5M4.5 4.5l.6 8.1a1 1 0 0 0 1 .9h3.8a1 1 0 0 0 1-.9l.6-8.1"/></svg>
+        </button>
+        <button id="start-selected" class="act start" title="Start selected" aria-label="Start selected">
+          <svg viewBox="0 0 16 16"><path d="M5 3.4v9.2L12.4 8z" class="solid"/></svg>
+        </button>
+        <button id="pause-selected" class="act pause" title="Pause selected" aria-label="Pause selected">
+          <svg viewBox="0 0 16 16"><rect x="4.25" y="3.5" width="2.5" height="9" rx=".6" class="solid"/><rect x="9.25" y="3.5" width="2.5" height="9" rx=".6" class="solid"/></svg>
+        </button>
+      </span>
+    </span>
+    <span class="c-size">Size</span>
+    <span class="c-progress">Progress</span>
+    <span class="c-speed">Speed</span>
+    <span class="c-seeds" title="Seeds you're connected to / seeds in the whole swarm">Seeds</span>
+    <span class="c-eta">Remaining</span>
+    <span class="c-actions"></span>
+  </div>
+
+  <main id="list" class="list" aria-label="Torrents"></main>
+
+  <section id="empty" class="empty" hidden>
+    <div class="empty-icon">
+      <svg viewBox="0 0 24 24"><path d="M12 4v11M7.5 10.5 12 15l4.5-4.5M5 19h14"/></svg>
+    </div>
+  </section>
+
+  <div id="toast" class="toast" role="alert" hidden></div>
+
+  <dialog id="delete-dialog" class="sheet">
+    <form method="dialog">
+      <h2 id="delete-title"></h2>
+      <p class="sheet-text" id="delete-text"></p>
+      <div class="sheet-actions">
+        <button value="list" class="btn ghost">Remove from List Only</button>
+        <span class="spacer"></span>
+        <button value="cancel" class="btn">Cancel</button>
+        <button value="trash" class="btn danger" autofocus>Move to Trash</button>
+      </div>
+    </form>
+  </dialog>
+
+  <template id="row-tpl">
+    <div class="item">
+      <div class="row" role="row">
+        <label class="c-check"><input type="checkbox" class="check" aria-label="Select"></label>
+        <div class="c-name">
+          <div class="title-line">
+            <button class="disclosure" title="Show files" aria-label="Show files" aria-expanded="false" hidden>
+              <svg viewBox="0 0 16 16"><path d="M6 4l4 4-4 4"/></svg>
+            </button>
+            <span class="name"></span>
+          </div>
+          <span class="sub"></span>
+        </div>
+        <span class="c-size num"></span>
+        <div class="c-progress">
+          <div class="bar"><div class="fill"></div></div>
+          <span class="pct num"></span>
+        </div>
+        <span class="c-speed num"></span>
+        <span class="c-seeds num"></span>
+        <span class="c-eta num"></span>
+        <div class="c-actions">
+          <button class="act play" title="Play video" aria-label="Play video" hidden>
+            <svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="6.25"/><path d="M6.6 5.4v5.2L10.8 8z" class="solid"/></svg>
+          </button>
+          <button class="act start" title="Start" aria-label="Start">
+            <svg viewBox="0 0 16 16"><path d="M5 3.4v9.2L12.4 8z" class="solid"/></svg>
+          </button>
+          <button class="act pause" title="Pause" aria-label="Pause">
+            <svg viewBox="0 0 16 16"><rect x="4.25" y="3.5" width="2.5" height="9" rx=".6" class="solid"/><rect x="9.25" y="3.5" width="2.5" height="9" rx=".6" class="solid"/></svg>
+          </button>
+          <button class="act delete" title="Delete" aria-label="Delete">
+            <svg viewBox="0 0 16 16"><path d="M3 4.5h10M6.5 4.5V3h3v1.5M4.5 4.5l.6 8.1a1 1 0 0 0 1 .9h3.8a1 1 0 0 0 1-.9l.6-8.1"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="files" hidden></div>
+    </div>
+  </template>
+
+  <template id="file-tpl">
+    <div class="file-row">
+      <span class="c-check"></span>
+      <div class="c-name"><span class="fname"><span class="dir"></span><span class="base"></span></span></div>
+      <span class="c-size num"></span>
+      <div class="c-progress">
+        <div class="bar"><div class="fill"></div></div>
+        <span class="pct num"></span>
+      </div>
+      <span class="c-speed"></span>
+      <span class="c-seeds"></span>
+      <span class="c-eta"></span>
+      <div class="c-actions">
+        <button class="act play" title="Play video" aria-label="Play video" hidden>
+          <svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="6.25"/><path d="M6.6 5.4v5.2L10.8 8z" class="solid"/></svg>
+        </button>
+      </div>
+    </div>
+  </template>
+</body>
+</html>

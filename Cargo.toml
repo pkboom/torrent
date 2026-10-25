@@ -1,0 +1,12 @@
+[workspace]
+resolver = "2"
+members = ["engine", "cli", "app/src-tauri"]
+
+[profile.release]
+opt-level = 3
+lto = "thin"
+codegen-units = 4
+
+# Hashing and protocol parsing are hot paths even in debug test runs.
+[profile.dev.package.sha1]
+opt-level = 3
