@@ -73,7 +73,6 @@ svg { fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round
   border-bottom: 1px solid var(--hairline);
   flex-shrink: 0;
 }
-.toolbar h1 { margin: 0; font-size: 14px; font-weight: 600; }
 
 
 /* Shared column layout for the header and rows. */

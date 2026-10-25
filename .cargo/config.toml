@@ -1,0 +1,4 @@
+# Spotlight skips directories ending in .noindex, so built .app bundles
+# don't show up next to the installed /Applications/Torrent.app.
+[build]
+target-dir = "target.noindex"
