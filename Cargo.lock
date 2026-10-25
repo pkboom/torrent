@@ -3847,15 +3847,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "torrent-cli"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "tokio",
- "torrent-engine",
-]
-
-[[package]]
 name = "torrent-engine"
 version = "0.1.0"
 dependencies = [

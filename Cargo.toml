@@ -1,6 +1,6 @@
 [workspace]
 resolver = "2"
-members = ["engine", "cli", "app/src-tauri"]
+members = ["engine", "app/src-tauri"]
 
 [profile.release]
 opt-level = 3
