@@ -52,10 +52,6 @@ const visibleTorrents = () => torrents;
 function createRow(id) {
   const item = $("row-tpl").content.firstElementChild.cloneNode(true);
   const el = item.querySelector(".row");
-  el.addEventListener("click", (e) => {
-    if (e.target.closest(".act, .c-check, .disclosure")) return;
-    clickRow(id, e);
-  });
   el.addEventListener("dblclick", (e) => {
     if (e.target.closest(".act, .c-check, .disclosure")) return;
     const t = torrents.find((x) => x.id === id);
